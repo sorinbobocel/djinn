@@ -1,0 +1,15 @@
+1. ADD NEW PRODUCT:
+
+curl --location --request POST 'localhost:8080/products' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "eanCode": 1234567891234,
+    "category": "PAINE",
+    "name": "Paine alba 300g",
+    "unitsPerBox": 24,
+    "quantity": 48,
+    "unitPrice": 3.50
+}'
+
+2. GET ONE PRODUCT:
+

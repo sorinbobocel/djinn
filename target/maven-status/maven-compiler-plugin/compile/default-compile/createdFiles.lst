@@ -1,0 +1,11 @@
+com\butlersuite\djinn\model\Product.class
+com\butlersuite\djinn\repository\ProductRepository.class
+com\butlersuite\djinn\exception\ExistingElementException.class
+com\butlersuite\djinn\dto\ProductDTO.class
+com\butlersuite\djinn\controller\ProductController.class
+com\butlersuite\djinn\DjinnApplication.class
+com\butlersuite\djinn\service\ProductService.class
+com\butlersuite\djinn\model\ProductCategory.class
+com\butlersuite\djinn\service\ProductServiceImpl.class
+com\butlersuite\djinn\utils\convert\ProductConverter.class
+com\butlersuite\djinn\utils\convert\Transformer.class

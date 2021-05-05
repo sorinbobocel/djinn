@@ -1,0 +1,1 @@
+INFO, 2021-05-05T15:34:04.290222600, details: A product with the specified product code: 022 is already in database.

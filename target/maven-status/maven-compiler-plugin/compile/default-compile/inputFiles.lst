@@ -1,0 +1,11 @@
+D:\dev\djinn\src\main\java\com\butlersuite\djinn\repository\ProductRepository.java
+D:\dev\djinn\src\main\java\com\butlersuite\djinn\service\ProductServiceImpl.java
+D:\dev\djinn\src\main\java\com\butlersuite\djinn\DjinnApplication.java
+D:\dev\djinn\src\main\java\com\butlersuite\djinn\exception\ExistingElementException.java
+D:\dev\djinn\src\main\java\com\butlersuite\djinn\model\ProductCategory.java
+D:\dev\djinn\src\main\java\com\butlersuite\djinn\service\ProductService.java
+D:\dev\djinn\src\main\java\com\butlersuite\djinn\model\Product.java
+D:\dev\djinn\src\main\java\com\butlersuite\djinn\utils\convert\Transformer.java
+D:\dev\djinn\src\main\java\com\butlersuite\djinn\controller\ProductController.java
+D:\dev\djinn\src\main\java\com\butlersuite\djinn\dto\ProductDTO.java
+D:\dev\djinn\src\main\java\com\butlersuite\djinn\utils\convert\ProductConverter.java
