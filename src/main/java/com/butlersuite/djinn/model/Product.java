@@ -27,8 +27,10 @@ public class Product {
 
    private BigDecimal unitPrice;
 
+   private boolean isActive;
+
    public Product(Integer productId, String productCode, ProductCategory category,
-                  String name, int unitsPerBox, int quantity, BigDecimal unitPrice) {
+                  String name, int unitsPerBox, int quantity, BigDecimal unitPrice, boolean isActive) {
       this.productId = productId;
       this.productCode = productCode;
       this.category = category;
@@ -36,5 +38,6 @@ public class Product {
       this.unitsPerBox = unitsPerBox;
       this.quantity = quantity;
       this.unitPrice = unitPrice;
+      this.isActive= isActive();
    }
 }

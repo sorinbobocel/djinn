@@ -16,6 +16,8 @@ import java.util.stream.Collectors;
 @Service
 public class ProductServiceImpl implements ProductService {
 
+   private static final String MESSAGE = "The element with the specified ID does not exist in database: ";
+
    private final ProductRepository productRepository;
 
    private final ProductConverter converter;
@@ -43,8 +45,7 @@ public class ProductServiceImpl implements ProductService {
       if (productRepository.existsById(productId)) {
          return converter.toDTO(productRepository.findById(productId).get());
       } else {
-         throw new NoSuchElementException("The product with ID " +
-               productId + " doesn't exist in database.");
+         throw new NoSuchElementException(MESSAGE + productId);
       }
    }
 
@@ -53,18 +54,54 @@ public class ProductServiceImpl implements ProductService {
       return productRepository.findAll().stream()
             .map(converter::toDTO)
             .collect(Collectors.toList());
-      }
-
-   @Override
-   public Product saveProduct(ProductDTO productDTO) {
-      Optional<Product> product =
-            productRepository.findProductByProductCode(productDTO.getProductCode());
-      return product.orElseGet(() ->
-            productRepository.save(converter.toEntity(productDTO)));
    }
 
    @Override
+   public Product saveProduct(ProductDTO productDTO) {
+      Optional <Product> optionalProduct =
+            productRepository.findProductByProductCode(productDTO.getProductCode());
+     if (optionalProduct.isPresent()) {
+        var product = optionalProduct.get();
+         product.setName(productDTO.getName());
+         product.setCategory(productDTO.getCategory());
+         product.setQuantity(productDTO.getQuantity());
+         product.setUnitPrice(productDTO.getUnitPrice());
+         product.setUnitsPerBox(productDTO.getUnitsPerBox());
+         return productRepository.save(product);
+      } else {
+         return productRepository.save(converter.toEntity(productDTO));
+      }
+   }
+
+   @Override
+   public void activateProduct(Integer productId) {
+      Optional<Product> optionalProduct = productRepository.findById(productId);
+      if (optionalProduct.isPresent()) {
+         var product = optionalProduct.get();
+         product.setActive(true);
+         productRepository.save(product);
+      } else {
+         throw new NoSuchElementException(MESSAGE + productId);
+      }
+   }
+
+   @Override
+   public void inactivateProduct(Integer productId) throws NoSuchElementException {
+      Optional<Product> optionalProduct = productRepository.findById(productId);
+      if (optionalProduct.isPresent()) {
+         var product = optionalProduct.get();
+         product.setActive(false);
+         productRepository.save(product);
+      } else {
+         throw new NoSuchElementException(MESSAGE + productId);
+      }
+   }
+
    public void deleteProduct(Integer productId) {
-      productRepository.deleteById(productId);
+      if (productRepository.existsById(productId)) {
+         productRepository.deleteById(productId);
+      } else {
+         throw new NoSuchElementException(MESSAGE + productId);
+      }
    }
 }

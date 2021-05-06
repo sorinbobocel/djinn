@@ -10,6 +10,22 @@ curl --location --request POST 'localhost:8080/products' \
     "quantity": 48,
     "unitPrice": 3.50
 }'
-
+-------------------------------------------------------
 2. GET ONE PRODUCT:
 
+curl --location --request GET 'localhost:8080/products/19'
+--------------------------------------------------------
+3. SHOW ALL PRODUCTS:
+
+curl --location --request GET 'localhost:8080/products'
+--------------------------------------------------------
+4. ACTIVATE A PRODUCT (EX. PRODUCT WITH ID 1):
+
+curl --location --request PUT 'localhost:8080/products/1/activate'
+---------------------------------------------------------
+5. INACTIVATE A PRODUCT (EX. PRODUCT WITH ID 1):
+curl --location --request PUT 'localhost:8080/products/1/inactivate'
+---------------------------------------------------------
+6. DELETE A PRODUCT FROM DB:
+curl --location --request DELETE 'localhost:8080/products/24'
+---------------------------------------------------------
