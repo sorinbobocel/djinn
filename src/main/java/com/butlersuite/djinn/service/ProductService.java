@@ -6,6 +6,7 @@ import com.butlersuite.djinn.model.Product;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 public interface ProductService {
@@ -16,6 +17,10 @@ public interface ProductService {
    List<ProductDTO> readAllProducts();
 
    Product saveProduct(ProductDTO productDTO);
+
+   void activateProduct(Integer productId);
+
+   void inactivateProduct(Integer productId) throws NoSuchElementException;
 
    void deleteProduct(Integer productId);
 }

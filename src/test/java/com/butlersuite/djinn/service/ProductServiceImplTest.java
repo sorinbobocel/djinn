@@ -1,12 +1,10 @@
 package com.butlersuite.djinn.service;
 
 import com.butlersuite.djinn.dto.ProductDTO;
-import com.butlersuite.djinn.exception.ExistingElementException;
 import com.butlersuite.djinn.model.Product;
 import com.butlersuite.djinn.repository.ProductRepository;
 import com.butlersuite.djinn.utils.convert.ProductConverter;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,13 +13,10 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static com.butlersuite.djinn.model.ProductCategory.PAINE;
-import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
 class ProductServiceImplTest {
@@ -49,7 +44,7 @@ class ProductServiceImplTest {
 
       //given
       Product product = new Product(1, "5049382718291", PAINE,
-            "Paine alba 300g", 24, 50, new BigDecimal(12.50));
+            "Paine alba 300g", 24, 50, new BigDecimal(12.50),  true);
 
       //when
       Mockito.when(mockProductRepository.existsById(1)).thenReturn(true);
