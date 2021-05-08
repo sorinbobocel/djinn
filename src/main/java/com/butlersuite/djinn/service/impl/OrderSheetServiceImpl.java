@@ -1,37 +1,44 @@
 package com.butlersuite.djinn.service.impl;
 
 import com.butlersuite.djinn.dto.ProductDTO;
-import com.butlersuite.djinn.model.Customer;
 import com.butlersuite.djinn.model.OrderItem;
 import com.butlersuite.djinn.model.OrderSheet;
 import com.butlersuite.djinn.repository.OrderSheetRepository;
 import com.butlersuite.djinn.service.OrderItemService;
 import com.butlersuite.djinn.service.OrderSheetService;
+import com.butlersuite.djinn.service.ProductService;
+import com.butlersuite.djinn.utils.convert.OrderItemConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static com.butlersuite.djinn.model.OrderStatus.PENDING;
+import static com.butlersuite.djinn.model.OrderStatus.VALIDATED;
 
 @Service
 public class OrderSheetServiceImpl implements OrderSheetService {
 
    private OrderSheetRepository orderRepository;
 
+   private ProductService productService;
+
    private OrderItemService orderItemService;
+
+   private OrderItemConverter converter;
 
    @Autowired
    public OrderSheetServiceImpl(OrderSheetRepository orderRepository,
-                                OrderItemService orderItemService) {
+                                ProductService productService, OrderItemService orderItemService, OrderItemConverter converter) {
       this.orderRepository = orderRepository;
+      this.productService = productService;
       this.orderItemService = orderItemService;
+      this.converter = converter;
    }
 
    /**
@@ -41,44 +48,62 @@ public class OrderSheetServiceImpl implements OrderSheetService {
     * @return a new pending OrderSheet.
     */
    @Override
-   public OrderSheet createNewOrder(UUID customerId) {
-      OrderSheet newOrder = new OrderSheet.Builder()
-            .customerId(customerId)
-            .orderDate(LocalDateTime.now().toString())
-            .itemsList(new ArrayList<>())
-            .totalAmount(new BigDecimal(0))
-            .orderStatus(PENDING)
-            .build();
-      return orderRepository.save(newOrder);
+   public OrderSheet createNewOrder(Integer customerId) {
+      var orderSheet = new OrderSheet();
+      orderSheet.setCustomerId(customerId);
+      orderSheet.setOrderDate(LocalDateTime.now().toString());
+      orderSheet.setItemsSet(new HashSet<>());
+      orderSheet.setOrderStatus(PENDING);
+      orderSheet.setTotalAmount(new BigDecimal(0));
+      return orderRepository.save(orderSheet);
    }
 
    @Override
-   public OrderSheet getOrder(UUID customerId) {
+   public OrderSheet getOrder(Integer customerId) {
       OrderSheet orderSheet;
       Optional<OrderSheet> optionalOrderSheet = orderRepository
             .findOrderSheetByCustomerIdAndOrderStatus(customerId, PENDING);
-      if (optionalOrderSheet.isPresent()) {
-         orderSheet = optionalOrderSheet.get();
-      } else {
-         orderSheet = createNewOrder(customerId);
-      }
+      orderSheet = optionalOrderSheet.orElseGet(() -> createNewOrder(customerId));
       return orderSheet;
    }
 
    @Override
-   public OrderSheet addItemToOrder(UUID customerId, ProductDTO productDTO) {
-      OrderSheet currentOrder = getOrder(customerId);
-      List<OrderItem> itemsList = currentOrder.getItemsList();
-      List<OrderItem> duplicates = itemsList.stream()
-            .filter(orderItem -> orderItem.getItemName().equals(productDTO.getName()))
+   public List<OrderSheet> getAllOrdersFromCustomer(Integer customerId) {
+      return orderRepository.findAll().stream()
+            .filter(orderSheet -> orderSheet.getCustomerId().equals(customerId))
             .collect(Collectors.toList());
-      if (duplicates == null) {
-         itemsList.add(orderItemService.createOrderItem(productDTO));
+   }
+
+   @Override
+   public OrderSheet addItemToOrder(Integer customerId, ProductDTO productDTO) {
+      var orderSheet = getOrder(customerId);
+      Optional<OrderItem> duplicateItem = orderSheet.getItemsSet().stream()
+            .filter(orderItem -> orderItem.getProductCode().equals(productDTO.getProductCode())).findAny();
+      if (duplicateItem.isEmpty()) {
+         addNewOrderLine(orderSheet, productDTO);
       } else {
-         OrderItem duplicate = duplicates.get(0);
-         orderItemService.updateOrderItemQuantity(duplicate);
+         updateExistingOrderLine(orderSheet, duplicateItem.get(), productDTO);
       }
-      return orderRepository.save(currentOrder);
+      return orderSheet;
+   }
+
+   public OrderSheet validateOrder(OrderSheet orderSheet) {
+      orderSheet.setOrderStatus(VALIDATED);
+      return orderRepository.save(orderSheet);
+   }
+
+   private void addNewOrderLine(OrderSheet orderSheet, ProductDTO productDTO) {
+      var newItem = orderItemService.createOrderItem(orderSheet, productDTO);
+      orderSheet.getItemsSet().add(newItem);
+      orderSheet.setTotalAmount(orderSheet.getTotalAmount().add(newItem.getOrderLineAmount()));
+      orderRepository.save(orderSheet);
+   }
+   private void updateExistingOrderLine(OrderSheet orderSheet, OrderItem orderItem,
+                                        ProductDTO productDTO) {
+      orderItemService.updateItem(orderItem, productDTO);
+      orderSheet.setTotalAmount(orderSheet.getTotalAmount().add(productDTO.getUnitPrice()
+            .multiply(BigDecimal.valueOf(productDTO.getOrderQuantity()))));
+      orderRepository.save(orderSheet);
    }
 }
 

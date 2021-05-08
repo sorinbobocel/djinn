@@ -64,9 +64,8 @@ public class ProductServiceImpl implements ProductService {
         var product = optionalProduct.get();
          product.setName(productDTO.getName());
          product.setCategory(productDTO.getCategory());
-         product.setQuantity(productDTO.getQuantity());
+         product.setStockQuantity(productDTO.getStockQuantity());
          product.setUnitPrice(productDTO.getUnitPrice());
-         product.setUnitsPerBox(productDTO.getUnitsPerBox());
          return productRepository.save(product);
       } else {
          return productRepository.save(converter.toEntity(productDTO));

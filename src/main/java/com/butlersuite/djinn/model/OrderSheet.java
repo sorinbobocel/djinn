@@ -1,59 +1,18 @@
 package com.butlersuite.djinn.model;
 
-import lombok.Getter;
-import lombok.ToString;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import lombok.Data;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.util.List;
-import java.util.UUID;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "ORDER_SHEET")
-@Getter
-@ToString
+@Data
 public class OrderSheet {
-
-   public static class Builder {
-
-      private UUID customerId;
-      private String orderDate;
-      private List<OrderItem> itemsList;
-      private BigDecimal totalAmount;
-      private OrderStatus orderStatus;
-
-      public Builder() {
-      }
-
-      public OrderSheet build() {
-         return new OrderSheet(this);
-      }
-
-      public Builder customerId(UUID customerId) {
-         this.customerId = customerId;
-         return this;
-      }
-
-      public Builder orderDate(String orderDate) {
-         this.orderDate = orderDate;
-         return this;
-      }
-
-      public Builder itemsList(List<OrderItem> itemsList) {
-         this.itemsList = itemsList;
-         return this;
-      }
-
-      public Builder totalAmount(BigDecimal totalAmount) {
-         this.totalAmount = totalAmount;
-         return this;
-      }
-
-      public Builder orderStatus (OrderStatus orderStatus) {
-         this.orderStatus = orderStatus;
-         return this;
-      }
-   }
 
    @Id
    @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -61,13 +20,14 @@ public class OrderSheet {
    private Long orderId;
 
    @Column(name = "customer_id")
-   private UUID customerId;
+   private Integer customerId;
 
    @Column(name = "date")
    private String orderDate;
 
    @OneToMany(mappedBy = "order")
-   private List<OrderItem> itemsList;
+   @JsonManagedReference
+   private Set<OrderItem> itemsSet = new HashSet<>();
 
    @Column(name = "total")
    private BigDecimal totalAmount;
@@ -76,11 +36,16 @@ public class OrderSheet {
    @Enumerated(EnumType.STRING)
    private OrderStatus orderStatus;
 
-   private OrderSheet(Builder builder) {
-      this.customerId = builder.customerId;
-      this.orderDate = builder.orderDate;
-      this.itemsList = builder.itemsList;
-      this.totalAmount = builder.totalAmount;
-      this.orderStatus = builder.orderStatus;
+   @Override
+   public boolean equals(Object o) {
+      if (this == o) return true;
+      if (o == null || getClass() != o.getClass()) return false;
+      OrderSheet that = (OrderSheet) o;
+      return orderId.equals(that.orderId);
+   }
+
+   @Override
+   public int hashCode() {
+      return Objects.hash(orderId, customerId, orderDate, totalAmount, orderStatus);
    }
 }

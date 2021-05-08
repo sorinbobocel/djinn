@@ -11,7 +11,7 @@ import java.util.UUID;
 public interface CustomerService {
    Customer createCustomer(CustomerDTO customerDTO);
 
-   CustomerDTO readCustomer(UUID customerID);
+   CustomerDTO readCustomer(Integer customerId);
 
    List<CustomerDTO> readAllCustomers();
 

@@ -29,3 +29,4 @@ curl --location --request PUT 'localhost:8080/products/1/inactivate'
 6. DELETE A PRODUCT FROM DB:
 curl --location --request DELETE 'localhost:8080/products/24'
 ---------------------------------------------------------
+

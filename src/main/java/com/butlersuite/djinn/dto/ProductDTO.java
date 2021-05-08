@@ -20,9 +20,9 @@ public class ProductDTO {
 
    private String name;
 
-   private int unitsPerBox;
-
-   private int quantity;
+   private int stockQuantity;
 
    private BigDecimal unitPrice;
+
+   private int orderQuantity;
 }
