@@ -4,14 +4,16 @@ import com.butlersuite.djinn.dto.ProductDTO;
 import com.butlersuite.djinn.model.OrderSheet;
 import org.springframework.stereotype.Service;
 
-import java.util.UUID;
+import java.util.List;
 
 @Service
 public interface OrderSheetService {
 
-   OrderSheet createNewOrder(UUID customerId);
+   OrderSheet getOrder(Integer customerId);
 
-   OrderSheet getOrder(UUID customerId);
+   List<OrderSheet> getAllOrdersFromCustomer(Integer customerId);
 
-   OrderSheet addItemToOrder(UUID customerId, ProductDTO productDTO);
+   OrderSheet addItemToOrder(Integer customerId, ProductDTO productDTO);
+
+   OrderSheet createNewOrder(Integer customerId);
 }

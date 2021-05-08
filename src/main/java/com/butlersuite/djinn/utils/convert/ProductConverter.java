@@ -18,7 +18,7 @@ public class ProductConverter implements Transformer<Product, ProductDTO> {
    @Override
    public Product toEntity(ProductDTO productDTO) {
       Product product = new Product();
-      BeanUtils.copyProperties(productDTO, product);
+      BeanUtils.copyProperties(productDTO, product, "orderQuantity");
       return product;
    }
 }

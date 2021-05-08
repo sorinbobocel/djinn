@@ -44,7 +44,7 @@ class ProductServiceImplTest {
 
       //given
       Product product = new Product(1, "5049382718291", PAINE,
-            "Paine alba 300g", 24, 50, new BigDecimal(12.50),  true);
+            "Paine alba 300g", 50, new BigDecimal(12.50),  true);
 
       //when
       Mockito.when(mockProductRepository.existsById(1)).thenReturn(true);

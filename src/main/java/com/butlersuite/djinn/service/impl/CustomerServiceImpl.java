@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -36,8 +35,8 @@ public class CustomerServiceImpl implements CustomerService {
    }
 
    @Override
-   public CustomerDTO readCustomer(UUID customerID) {
-      return converter.toDTO(customerRepository.getOne(customerID));
+   public CustomerDTO readCustomer(Integer customerId) {
+      return converter.toDTO(customerRepository.getOne(customerId));
    }
 
    @Override
