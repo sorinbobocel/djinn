@@ -1,20 +1,16 @@
 package com.butlersuite.djinn.dto;
 
-import com.butlersuite.djinn.model.OrderSheet;
+import com.butlersuite.djinn.model.CustomerDetails;
 import lombok.Data;
-
-import java.util.Set;
 
 @Data
 public class CustomerDTO {
 
-   private String customerName;
+   private String companyName;
 
    private String customerEmail;
 
    private String customerPassword;
 
-   private String customerPhone;
-
-   private Set<OrderSheet> orderSheets;
+   private CustomerDetails customerDetails;
 }

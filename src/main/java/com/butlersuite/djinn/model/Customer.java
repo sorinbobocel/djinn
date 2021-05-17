@@ -1,8 +1,11 @@
 package com.butlersuite.djinn.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "CUSTOMER")
@@ -10,12 +13,12 @@ import javax.persistence.*;
 public class Customer {
 
    @Id
-   @GeneratedValue(strategy = GenerationType.TABLE)
-   @Column(name = "customer_id")
-   private Integer customerId;
+   @GeneratedValue(strategy = GenerationType.IDENTITY)
+   @Column(name = "id")
+   private Long customerId;
 
    @Column(name = "name")
-   private String customerName;
+   private String companyName;
 
    @Column(name = "email")
    private String customerEmail;
@@ -23,6 +26,10 @@ public class Customer {
    @Column(name = "password")
    private String customerPassword;
 
-   @Column(name = "phone")
-   private String customerPhone;
+   @Embedded
+   private CustomerDetails customerDetails;
+
+   @JsonManagedReference
+   @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
+   private List<Cart> carts = new ArrayList<>();
 }

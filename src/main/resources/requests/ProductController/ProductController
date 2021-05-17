@@ -3,13 +3,11 @@
 curl --location --request POST 'localhost:8080/products' \
 --header 'Content-Type: application/json' \
 --data-raw '{
-    "eanCode": 1234567891234,
-    "category": "PAINE",
-    "name": "Paine alba 300g",
-    "unitsPerBox": 24,
-    "quantity": 48,
-    "unitPrice": 3.50
-}'
+        "category": "PAINE",
+        "name": "TEST",
+        "stockQuantity": 10,
+        "unitPrice": 2.50
+    }'
 -------------------------------------------------------
 2. GET ONE PRODUCT:
 
@@ -30,3 +28,4 @@ curl --location --request PUT 'localhost:8080/products/1/inactivate'
 curl --location --request DELETE 'localhost:8080/products/24'
 ---------------------------------------------------------
 
+ ``

@@ -1,6 +1,6 @@
 package com.butlersuite.djinn.model;
 
-public enum OrderStatus {
+public enum Status {
 
    PENDING("PENDING"),
    VALIDATED("VALIDATED"),
@@ -8,7 +8,7 @@ public enum OrderStatus {
 
    private final String value;
 
-   private OrderStatus(String value) {
+   private Status(String value) {
       this.value = value;
    }
 

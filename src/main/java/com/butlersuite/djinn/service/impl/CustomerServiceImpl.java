@@ -1,6 +1,7 @@
 package com.butlersuite.djinn.service.impl;
 
 import com.butlersuite.djinn.dto.CustomerDTO;
+import com.butlersuite.djinn.exception.ExistingElementException;
 import com.butlersuite.djinn.model.Customer;
 import com.butlersuite.djinn.repository.CustomerRepository;
 import com.butlersuite.djinn.service.CustomerService;
@@ -16,48 +17,39 @@ import java.util.stream.Collectors;
 @Service
 public class CustomerServiceImpl implements CustomerService {
 
-   private static final String MESSAGE = "The specified email does not exist in database: ";
-
    private CustomerRepository customerRepository;
 
    private CustomerConverter converter;
 
    @Autowired
-   public CustomerServiceImpl(CustomerRepository customerRepository,
-                              CustomerConverter converter) {
+   public CustomerServiceImpl(CustomerRepository customerRepository, CustomerConverter converter) {
       this.customerRepository = customerRepository;
       this.converter = converter;
    }
 
    @Override
    public Customer createCustomer(CustomerDTO customerDTO) {
-      return customerRepository.save(converter.toEntity(customerDTO));
+      var customer = customerRepository.findByCompanyName(customerDTO.getCompanyName());
+      if (customer.isEmpty()) {
+         return customerRepository.save(converter.toEntity(customerDTO));
+      } else {
+         throw new ExistingElementException("This company name: " + customer.get().getCompanyName().toUpperCase() + "  is already in database. Please specify the exact workstation.");
+      }
    }
 
    @Override
-   public CustomerDTO readCustomer(Integer customerId) {
-      return converter.toDTO(customerRepository.getOne(customerId));
+   public Customer getCustomer(Long customerId) throws NoSuchElementException {
+      Optional<Customer>optionalCustomer = customerRepository.findById(customerId);
+      if(optionalCustomer.isPresent()) {
+         return optionalCustomer.get();
+      } else {
+         throw new NoSuchElementException("The required customer is not present in database.");
+      }
    }
 
-   @Override
-   public List<CustomerDTO> readAllCustomers() {
+   public List<CustomerDTO> getAllCustomers() {
       return customerRepository.findAll().stream()
             .map(converter::toDTO)
             .collect(Collectors.toList());
-   }
-
-   @Override
-   public Customer saveCustomer(CustomerDTO customerDTO) {
-      Optional <Customer> optionalCustomer =
-            customerRepository.findByCustomerEmail(customerDTO.getCustomerEmail());
-      if (optionalCustomer.isPresent()) {
-         var customer = optionalCustomer.get();
-         customer.setCustomerName(customerDTO.getCustomerName());
-         customer.setCustomerPassword(customerDTO.getCustomerPassword());
-         customer.setCustomerPhone(customerDTO.getCustomerPhone());
-         return customerRepository.save(customer);
-      } else {
-         throw new NoSuchElementException(MESSAGE + customerDTO.getCustomerEmail());
-      }
    }
 }
