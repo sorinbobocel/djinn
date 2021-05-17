@@ -1,20 +1,14 @@
 package com.butlersuite.djinn.dto;
 
 import com.butlersuite.djinn.model.ProductCategory;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.Data;
 
 import java.math.BigDecimal;
 
-@Getter
-@Setter
-@ToString
-@RequiredArgsConstructor
+@Data
 public class ProductDTO {
 
-   private String productCode;
+   private Long productId;
 
    private ProductCategory category;
 
@@ -23,6 +17,4 @@ public class ProductDTO {
    private int stockQuantity;
 
    private BigDecimal unitPrice;
-
-   private int orderQuantity;
 }

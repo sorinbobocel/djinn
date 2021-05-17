@@ -6,19 +6,19 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ProductConverter implements Transformer<Product, ProductDTO> {
-
-   @Override
-   public ProductDTO toDTO(Product product) {
-      ProductDTO productDTO = new ProductDTO();
-      BeanUtils.copyProperties(product, productDTO, "productId");
-      return productDTO;
-   }
+public class ProductConverter implements Transformer<Product , ProductDTO> {
 
    @Override
    public Product toEntity(ProductDTO productDTO) {
-      Product product = new Product();
-      BeanUtils.copyProperties(productDTO, product, "orderQuantity");
+      var product = new Product();
+      BeanUtils.copyProperties(productDTO, product);
       return product;
+   }
+
+   @Override
+   public ProductDTO toDTO(Product product) {
+      var productDTO = new ProductDTO();
+      BeanUtils.copyProperties(product, productDTO);
+      return productDTO;
    }
 }

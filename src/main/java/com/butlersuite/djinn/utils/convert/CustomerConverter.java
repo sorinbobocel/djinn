@@ -6,19 +6,19 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 
 @Component
-public class CustomerConverter implements Transformer<Customer , CustomerDTO> {
-
-   @Override
-   public CustomerDTO toDTO(Customer customer) {
-      CustomerDTO customerDTO = new CustomerDTO();
-      BeanUtils.copyProperties(customer, customerDTO, "customerID");
-      return customerDTO;
-   }
+public class CustomerConverter implements Transformer<Customer, CustomerDTO> {
 
    @Override
    public Customer toEntity(CustomerDTO customerDTO) {
-      Customer customer = new Customer();
+      var customer = new Customer();
       BeanUtils.copyProperties(customerDTO, customer);
       return customer;
+   }
+
+   @Override
+   public CustomerDTO toDTO(Customer customer) {
+      var customerDTO = new CustomerDTO();
+      BeanUtils.copyProperties(customer, customerDTO, "customerId");
+      return customerDTO;
    }
 }

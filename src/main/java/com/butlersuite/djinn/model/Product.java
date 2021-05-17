@@ -1,47 +1,49 @@
 package com.butlersuite.djinn.model;
 
-import lombok.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.math.BigDecimal;
 
 @Entity
-@Table(name = "product")
+@Table(name = "PRODUCT")
 @Data
-@NoArgsConstructor
 public class Product {
 
    @Id
    @GeneratedValue(strategy= GenerationType.IDENTITY)
-   private Integer productId;
+   @Column(name = "id")
+   private Long productId;
 
-   @Column(name = "code")
-   private String productCode;
-
-   @Column
+   @Column(name = "category")
    @Enumerated(EnumType.STRING)
    private ProductCategory category;
 
    @Column(name = "name")
    private String name;
 
-   @Column(name = "quantity")
+@Column(name = "quantity")
    private int stockQuantity;
 
    @Column(name = "price")
    private BigDecimal unitPrice;
 
-   @Column(name = "active")
-   private boolean isActive;
-
-   public Product(Integer productId, String productCode, ProductCategory category,
-                  String name, int stockQuantity, BigDecimal unitPrice, boolean isActive) {
+   public Product(Long productId, ProductCategory category, String name, int stockQuantity, BigDecimal unitPrice) {
       this.productId = productId;
-      this.productCode = productCode;
       this.category = category;
       this.name = name;
       this.stockQuantity = stockQuantity;
       this.unitPrice = unitPrice;
-      this.isActive= isActive();
+   }
+
+   public Product() {
    }
 }
