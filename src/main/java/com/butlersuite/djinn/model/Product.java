@@ -1,5 +1,6 @@
 package com.butlersuite.djinn.model;
 
+import com.butlersuite.djinn.exception.InsufficientStockException;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -11,6 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
 @Entity
@@ -19,7 +21,7 @@ import java.math.BigDecimal;
 public class Product {
 
    @Id
-   @GeneratedValue(strategy= GenerationType.IDENTITY)
+   @GeneratedValue(strategy = GenerationType.IDENTITY)
    @Column(name = "id")
    private Long productId;
 
@@ -28,12 +30,14 @@ public class Product {
    private ProductCategory category;
 
    @Column(name = "name")
+   @NotNull
    private String name;
 
-@Column(name = "quantity")
+   @Column(name = "quantity")
    private int stockQuantity;
 
    @Column(name = "price")
+   @NotNull
    private BigDecimal unitPrice;
 
    public Product(Long productId, ProductCategory category, String name, int stockQuantity, BigDecimal unitPrice) {
@@ -45,5 +49,17 @@ public class Product {
    }
 
    public Product() {
+   }
+
+   public void increaseProductStock(int quantity) {
+      this.setStockQuantity(this.getStockQuantity() + quantity);
+   }
+
+   public void decreaseProductStock(int quantity) throws InsufficientStockException {
+      if (quantity <= this.stockQuantity) {
+         this.setStockQuantity(this.getStockQuantity() - quantity);
+      } else {
+         throw new InsufficientStockException("The quantity in stock is not enough to complete the sale. Available quantity : " + this.stockQuantity);
+      }
    }
 }

@@ -1,10 +1,10 @@
 INSERT INTO PRODUCT(id, category, name, quantity, price)
 VALUES
-(1, 'PAINE', 'PAINE  CASA 500G', 50, '2.50'),
- (2, 'PAINE', 'PAINE  CASA FELII 500G', 50, '2.50'),
+(1, 'PAINE', 'PAINE CASA 500G', 50, '2.50'),
+ (2, 'PAINE', 'PAINE CASA FELII 500G', 50, '2.50'),
   (3,  'PAINE', 'FLOAREA SOARELUI 500G', 50, '2.50'),
-   (4, 'PAINE', 'PAINE  INTEGRALA 500G', 50, '2.50'),
-     (5, 'PAINE', 'PAINE  CU CARTOFI 450G', 50, '2.50'),
+   (4, 'PAINE', 'PAINE INTEGRALA 500G', 50, '2.50'),
+     (5, 'PAINE', 'PAINE CU CARTOFI 450G', 50, '2.50'),
       (6, 'PATISERIE', 'CORN CIOCOLATA 100G', 50, '2.00'),
        (7, 'PATISERIE', 'CORN VANILIE 100G', 50, '2.00'),
         (8, 'PATISERIE', 'CORN GEM 100G', 50, '2.00'),

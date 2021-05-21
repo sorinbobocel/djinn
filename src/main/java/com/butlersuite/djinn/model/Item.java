@@ -1,15 +1,19 @@
 package com.butlersuite.djinn.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
-import java.util.Objects;
 
 @Entity
 @Table(name = "ITEMS")
-@Data
+@Getter
+@Setter
+@ToString
 public class Item {
 
    @Id
@@ -17,13 +21,11 @@ public class Item {
    @Column(name = "id")
    private Long itemId;
 
-   @OneToOne
-   private Product product;
-
-   @Column(name = "quantity")
-   private int itemQuantity;
+   @Embedded
+   private OrderDetail orderDetail;
 
    @Column(name = "amount")
+   @NotNull
    private BigDecimal itemValue;
 
    @JsonBackReference
@@ -35,22 +37,8 @@ public class Item {
    public String toString() {
       return "Item{" +
             "itemId=" + itemId +
-            ", product=" + product +
-            ", itemQuantity=" + itemQuantity +
+            "orderDetail=" + orderDetail +
             ", itemValue=" + itemValue +
             '}';
-   }
-
-   @Override
-   public boolean equals(Object o) {
-      if (this == o) return true;
-      if (o == null || getClass() != o.getClass()) return false;
-      Item item = (Item) o;
-      return itemQuantity == item.itemQuantity && itemId.equals(item.itemId) && product.equals(item.product) && itemValue.equals(item.itemValue);
-   }
-
-   @Override
-   public int hashCode() {
-      return Objects.hash(itemId, product, itemQuantity, itemValue);
    }
 }

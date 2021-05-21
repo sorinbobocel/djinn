@@ -15,6 +15,8 @@ import java.util.stream.Collectors;
 @Service
 public class ProductServiceImpl implements com.butlersuite.djinn.service.ProductService {
 
+   private final String NO_PRODUCT = "Product is not present in database.";
+
    private ProductRepository productRepository;
 
    private ProductConverter converter;
@@ -36,7 +38,7 @@ public class ProductServiceImpl implements com.butlersuite.djinn.service.Product
       if (product.isPresent()) {
          return converter.toDTO(product.get());
       } else {
-         throw new NoSuchElementException("Product is not present in database.");
+         throw new NoSuchElementException(NO_PRODUCT);
       }
    }
 
@@ -46,5 +48,29 @@ public class ProductServiceImpl implements com.butlersuite.djinn.service.Product
             .filter(product -> product.getStockQuantity() > 0)
             .map(converter::toDTO)
             .collect(Collectors.toList());
+   }
+
+   @Override
+   public void increaseProductStock(Long productId, int quantity) {
+      var optionalProduct = productRepository.findById(productId);
+      if (optionalProduct.isPresent()) {
+         var product = optionalProduct.get();
+         product.increaseProductStock(quantity);
+         productRepository.save(product);
+      } else {
+         throw new NoSuchElementException(NO_PRODUCT);
+      }
+   }
+
+   @Override
+   public void decreaseProductStock(Long productId, int quantity) {
+      var optionalProduct = productRepository.findById(productId);
+      if (optionalProduct.isPresent()) {
+         var product = optionalProduct.get();
+         product.decreaseProductStock(quantity);
+         productRepository.save(product);
+      } else {
+         throw new NoSuchElementException(NO_PRODUCT);
+      }
    }
 }

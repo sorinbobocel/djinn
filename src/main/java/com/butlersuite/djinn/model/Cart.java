@@ -1,21 +1,14 @@
 package com.butlersuite.djinn.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
-import java.nio.channels.ScatteringByteChannel;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,6 +39,7 @@ public class Cart {
    private BigDecimal totalAmount;
 
    @Column
+   @NotNull
    private Status status;
 
    public Cart(Customer customer, String creationDate, List<Item> itemsList, BigDecimal totalAmount, Status status) {

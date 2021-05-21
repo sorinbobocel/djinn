@@ -1,9 +1,11 @@
 package com.butlersuite.djinn.model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.sun.istack.NotNull;
 import lombok.Data;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,9 +20,12 @@ public class Customer {
    private Long customerId;
 
    @Column(name = "name")
+   @NotNull
    private String companyName;
 
    @Column(name = "email")
+   @Email
+   @NotNull
    private String customerEmail;
 
    @Column(name = "password")

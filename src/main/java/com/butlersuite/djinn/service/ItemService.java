@@ -10,4 +10,6 @@ public interface ItemService {
    Item generateItem(ProductDTO productDTO, int quantity);
 
    void deleteItem(Item item);
+
+   void decreaseProductStock(Item item);
 }
