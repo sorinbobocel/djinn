@@ -1,7 +1,8 @@
 package com.butlersuite.djinn.controller;
 
 import com.butlersuite.djinn.dto.ProductDTO;
-import com.butlersuite.djinn.model.Cart;
+import com.butlersuite.djinn.exception.InsufficientOrderQuantityException;
+import com.butlersuite.djinn.exception.InsufficientStockException;
 import com.butlersuite.djinn.model.Item;
 import com.butlersuite.djinn.service.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,29 +35,37 @@ public class CartController {
 
    @PostMapping("/{customerId}")
    public ResponseEntity<String> addItem(@PathVariable Long customerId, @RequestBody ProductAndQuantity productAndQuantity) {
-      cartService.addToCart(customerId, productAndQuantity.productDTO, productAndQuantity.quantity);
-      return new ResponseEntity<>("Product added to cart.", HttpStatus.CREATED);
+      try {
+         cartService.addToCart(customerId, productAndQuantity.productDTO, productAndQuantity.quantity);
+         return new ResponseEntity<>("Product added to cart.", HttpStatus.CREATED);
+      } catch (InsufficientStockException | InsufficientOrderQuantityException exception) {
+         return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_ACCEPTABLE);
+      }
    }
 
    @PutMapping("/{customerId}")
    public ResponseEntity<String> removeItem(@PathVariable Long customerId, @RequestBody Item item) {
       cartService.removeFromCart(customerId, item);
       return new ResponseEntity<>("Item removed from cart.", HttpStatus.GONE);
-}
-
-@DeleteMapping("/{customerId}")
-public ResponseEntity<String> cancelOrder(@PathVariable Long customerId) {
-   try {
-      cartService.destroyCart(customerId);
-      return new ResponseEntity<>("Order canceled.", HttpStatus.GONE);
-   } catch (NoSuchElementException exception) {
-      return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
    }
-}
+
+   @DeleteMapping("/{customerId}")
+   public ResponseEntity<String> cancelOrder(@PathVariable Long customerId) {
+      try {
+         cartService.destroyCart(customerId);
+         return new ResponseEntity<>("Order canceled.", HttpStatus.GONE);
+      } catch (NoSuchElementException exception) {
+         return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
+      }
+   }
 
    @PostMapping("/{customerId}/validate")
-   public ResponseEntity validateOrder(@PathVariable Long customerId) {
-      cartService.validateCart(customerId);
-      return new ResponseEntity("Validated successfully", HttpStatus.CREATED);
+   public ResponseEntity<String> validateOrder(@PathVariable Long customerId) {
+      try {
+         cartService.validateCart(customerId);
+         return new ResponseEntity<>("Validated successfully", HttpStatus.CREATED);
+      } catch (InsufficientStockException | NoSuchElementException exception) {
+         return new ResponseEntity<>(exception.getMessage(), HttpStatus.PRECONDITION_FAILED);
+      }
    }
 }

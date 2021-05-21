@@ -1,2 +1,2 @@
-com\butlersuite\djinn\service\ProductServiceImplTest.class
 com\butlersuite\djinn\DjinnApplicationTests.class
+com\butlersuite\djinn\service\impl\CartServiceImplTest.class

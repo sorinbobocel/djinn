@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="com.butlersuite.djinn.DjinnApplicationTests" time="13.062" tests="1" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="com.butlersuite.djinn.service.impl.CartServiceImplTest" time="0.266" tests="5" errors="0" skipped="0" failures="0">
   <properties>
     <property name="sun.desktop" value="windows"/>
     <property name="awt.toolkit" value="sun.awt.windows.WToolkit"/>
@@ -61,5 +61,9 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="java.class.version" value="55.0"/>
   </properties>
-  <testcase name="contextLoads" classname="com.butlersuite.djinn.DjinnApplicationTests" time="0.219"/>
+  <testcase name="destroyCart" classname="com.butlersuite.djinn.service.impl.CartServiceImplTest" time="0.25"/>
+  <testcase name="test_if_out_of_stock_item_throws_exception" classname="com.butlersuite.djinn.service.impl.CartServiceImplTest" time="0.016"/>
+  <testcase name="getCart" classname="com.butlersuite.djinn.service.impl.CartServiceImplTest" time="0"/>
+  <testcase name="validateCart" classname="com.butlersuite.djinn.service.impl.CartServiceImplTest" time="0"/>
+  <testcase name="removeFromCart" classname="com.butlersuite.djinn.service.impl.CartServiceImplTest" time="0"/>
 </testsuite>
