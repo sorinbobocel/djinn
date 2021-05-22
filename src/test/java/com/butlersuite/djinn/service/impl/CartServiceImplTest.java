@@ -29,7 +29,7 @@ class CartServiceImplTest {
    private CartRepository mockCartRepository;
 
    @Mock
-   private CustomerService mockCustomerService;
+   private CustomerServiceImpl mockCustomerService;
 
    @Mock
    private ItemService mockItemService;

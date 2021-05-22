@@ -5,7 +5,6 @@ import com.butlersuite.djinn.exception.InsufficientStockException;
 import com.butlersuite.djinn.model.Cart;
 import com.butlersuite.djinn.model.Item;
 import com.butlersuite.djinn.repository.CartRepository;
-import com.butlersuite.djinn.service.CustomerService;
 import com.butlersuite.djinn.service.ItemService;
 import com.butlersuite.djinn.utils.builder.StringBuilderPlus;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,12 +31,12 @@ public class CartServiceImpl implements com.butlersuite.djinn.service.CartServic
 
    private CartRepository cartRepository;
 
-   private CustomerService customerService;
+   private CustomerServiceImpl customerService;
 
    private ItemService itemService;
 
    @Autowired
-   public CartServiceImpl(CartRepository cartRepository, CustomerService customerService, ItemService itemService) {
+   public CartServiceImpl(CartRepository cartRepository, CustomerServiceImpl customerService, ItemService itemService) {
       this.cartRepository = cartRepository;
       this.customerService = customerService;
       this.itemService = itemService;
@@ -75,7 +74,7 @@ public class CartServiceImpl implements com.butlersuite.djinn.service.CartServic
       if (existingCart != null) {
          return existingCart;
       } else {
-         return cartRepository.save(new Cart(customerService.getCustomer(customerId),
+         return cartRepository.save(new Cart(customerService.getCartCustomer(customerId),
                formatDate(LocalDateTime.now()), new ArrayList<>(), new BigDecimal(0), PENDING));
       }
    }
@@ -129,7 +128,7 @@ public class CartServiceImpl implements com.butlersuite.djinn.service.CartServic
    @Override
    public void destroyCart(Long customerId) throws NoSuchElementException {
       Optional<Cart> cart = cartRepository.findByCustomerAndStatus(
-            customerService.getCustomer(customerId), PENDING);
+            customerService.getCartCustomer(customerId), PENDING);
       if (cart.isPresent()) {
          cartRepository.delete(cart.get());
       } else {
@@ -140,7 +139,7 @@ public class CartServiceImpl implements com.butlersuite.djinn.service.CartServic
    //---------------- HELPER METHODS --------------- //
 
    private Cart getExistingCart(Long customerId) {
-      var customer = customerService.getCustomer(customerId);
+      var customer = customerService.getCartCustomer(customerId);
       Optional<Cart> cart = cartRepository.findByCustomerAndStatus(customer, PENDING);
       return cart.orElse(null);
    }
