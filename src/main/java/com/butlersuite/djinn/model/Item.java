@@ -3,7 +3,6 @@ package com.butlersuite.djinn.model;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -13,7 +12,6 @@ import java.math.BigDecimal;
 @Table(name = "ITEMS")
 @Getter
 @Setter
-@ToString
 public class Item {
 
    @Id

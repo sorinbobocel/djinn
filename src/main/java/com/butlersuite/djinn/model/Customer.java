@@ -8,6 +8,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "CUSTOMER")
@@ -37,4 +38,17 @@ public class Customer {
    @JsonManagedReference
    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
    private List<Cart> carts = new ArrayList<>();
+
+   @Override
+   public boolean equals(Object o) {
+      if (this == o) return true;
+      if (o == null || getClass() != o.getClass()) return false;
+      Customer customer = (Customer) o;
+      return companyName.equals(customer.companyName) && customerEmail.equals(customer.customerEmail) && customerPassword.equals(customer.customerPassword) && customerDetails.equals(customer.customerDetails);
+   }
+
+   @Override
+   public int hashCode() {
+      return Objects.hash(companyName, customerDetails);
+   }
 }
